@@ -10,13 +10,21 @@ const instance = axios.create({
 
 interface HTTPResponse {
   results: Movie[];
+  total_pages: number;
 }
 
-export const movieService = async (searchTerm: string): Promise<Movie[]> => {
+export const movieService = async (
+  searchTerm: string,
+  page: number,
+): Promise<{ movies: Movie[]; totalPages: number }> => {
   const response = await instance.get<HTTPResponse>("/search/movie", {
     params: {
       query: searchTerm,
+      page: page,
     },
   });
-  return response.data.results;
+  return {
+    movies: response.data.results,
+    totalPages: response.data.total_pages,
+  };
 };
