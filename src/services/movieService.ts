@@ -13,18 +13,13 @@ interface HTTPResponse {
   total_pages: number;
 }
 
-export const movieService = async (
-  searchTerm: string,
-  page: number,
-): Promise<{ movies: Movie[]; totalPages: number }> => {
+export const movieService = async (searchTerm: string, page: number = 1) => {
   const response = await instance.get<HTTPResponse>("/search/movie", {
     params: {
       query: searchTerm,
-      page: page,
+      page,
     },
   });
-  return {
-    movies: response.data.results,
-    totalPages: response.data.total_pages,
-  };
+
+  return response.data;
 };
